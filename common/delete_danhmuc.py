@@ -14,19 +14,18 @@ def delete_danhmuc(id_danhmuc):
         return
 
     try:
+        # Sửa lỗi: Thêm câu lệnh SQL và logic xử lý
+        sql = "DELETE FROM danhmuc WHERE id_danhmuc = %s"
         cursor = connection.cursor()
-        sql = "DELETE FROM danhmuc WHERE id = %s"
+
         cursor.execute(sql, (id_danhmuc,))
         connection.commit()
 
-        if cursor.rowcount > 0:
-            print(f"✅ Đã xóa danh mục có ID = {id_danhmuc}")
-        else:
-            print(f"⚠️ Không tìm thấy danh mục có ID = {id_danhmuc}")
+        print(f"Danh mục có ID {id_danhmuc} đã được xóa thành công.")
+
     except Error as e:
-        print("❌ Lỗi khi xóa danh mục:", e)
+        print(f"Lỗi khi xóa danh mục: {e}")
+        connection.rollback()
+
     finally:
-        if connection.is_connected():
-            cursor.close()
-            connection.close()
-            print("🔒 Đã đóng kết nối MySQL.")
+        connection.close()
